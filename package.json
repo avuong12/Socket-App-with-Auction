@@ -2,7 +2,7 @@
   "name": "sockets_tutorial",
   "version": "1.0.0",
   "description": "my first socket app",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

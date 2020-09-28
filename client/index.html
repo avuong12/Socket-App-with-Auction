@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="message.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+      function loadChatApp() {
+        const form = document.getElementById('message-form');
+        form.onsubmit = sendMessage;
+      }
+
+      function sendMessage(event) {
+        event.preventDefault();
+        let inputMessage = document.getElementById('m');
+        // send the message to the sever. Give it a "route".
+        socket.emit('chat message', inputMessage.value);
+        // clear the text block on the DOM.
+        inputMessage.value = '';
+        return false;
+      }
+    </script>
+  </head>
+  <!--load function when page is loaded with empty DOM-->
+  <body onload="loadChatApp()">
+    <ul id="messages"></ul>
+    <form id="message-form" action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+  </body>
+</html>
