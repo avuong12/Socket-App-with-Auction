@@ -16,14 +16,7 @@ const server = app.listen(port, function () {
 const io = require('socket.io')(server);
 
 io.on('connection', (socket) => {
-  socket.on('chat message', (msg) => {
-    console.log('message: ' + msg);
-  });
-});
-
-io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('disconnect', () => {
-    console.log('user disconnected');
+  socket.on('send_message', (msg) => {
+    io.emit('send_message', msg);
   });
 });
