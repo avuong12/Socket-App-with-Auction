@@ -15,8 +15,20 @@ const server = app.listen(port, function () {
 
 const io = require('socket.io')(server);
 
+let userNames = {};
+let socketIds = {};
+
 io.on('connection', (socket) => {
+  socket.on('set_username', (name) => {
+    if (!userNames.hasOwnProperty(name)) {
+      userNames[name] = socket.id;
+      socketIds[socket.id] = name;
+      io.emit('set_username', name);
+    } else {
+      io.emit('set_username', false);
+    }
+  });
   socket.on('send_message', (msg) => {
-    io.emit('send_message', msg);
+    io.emit('send_message', `${socketIds[socket.id]}: ${msg}`);
   });
 });

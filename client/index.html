@@ -2,40 +2,26 @@
 <html>
   <head>
     <title>Socket.IO chat</title>
+    <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="message.css" />
+    <link rel="stylesheet" href="username.css" />
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      const socket = io();
-      function loadChatApp() {
-        const form = document.getElementById('message-form');
-        form.onsubmit = sendMessage;
-
-        socket.on('send_message', addMessage);
-      }
-
-      function sendMessage(event) {
-        event.preventDefault();
-        let inputMessage = document.getElementById('m');
-        // send the message to the sever. Give it a "route".
-        socket.emit('send_message', inputMessage.value);
-        // clear the text block on the DOM.
-        inputMessage.value = '';
-        return false;
-      }
-
-      function addMessage(message) {
-        const messages = document.getElementById('messages');
-        const newMessage = document.createElement('li');
-        newMessage.innerHTML = message;
-        messages.appendChild(newMessage);
-      }
-    </script>
+    <script type="text/javascript" src="chat.js"></script>
   </head>
   <!--load function when page is loaded with empty DOM-->
   <body onload="loadChatApp()">
-    <ul id="messages"></ul>
-    <form id="message-form" action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
+    <div class="messages_block">
+      <ul id="messages"></ul>
+      <form id="message-form" action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
+    <div class="username_block">
+      <ul id="users"></ul>
+      <form id="username" action="">
+        <input id="name" autocomplete="off" /><button>Send</button>
+      </form>
     </form>
+  </div>
   </body>
 </html>
