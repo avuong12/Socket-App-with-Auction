@@ -15,10 +15,22 @@ const server = app.listen(port, function () {
 
 const io = require('socket.io')(server);
 
-let userNames = {};
+let userNames = { angele: 'wsgh', sam: 'bgeoah' };
 let socketIds = {};
+let chats = [
+  { user: 'sam', message: 'hi' },
+  { user: 'sam', message: 'test' },
+];
 
 io.on('connection', (socket) => {
+  // Emits all users connected to socket.
+  const names = Object.keys(userNames);
+  io.to(socket.id).emit('send_usernames', JSON.stringify(names));
+
+  // Emits chat history.
+  io.to(socket.id).emit('send_chat_history', JSON.stringify(chats));
+
+  // Setting a new user.
   socket.on('set_username', (name) => {
     if (!userNames.hasOwnProperty(name)) {
       userNames[name] = socket.id;
@@ -28,7 +40,11 @@ io.on('connection', (socket) => {
       io.emit('set_username', false);
     }
   });
+
+  // Sending a new message.
   socket.on('send_message', (msg) => {
+    const chatEntry = { user: socketIds[socket.id], message: msg };
+    chats.push(chatEntry);
     io.emit('send_message', `${socketIds[socket.id]}: ${msg}`);
   });
 });
