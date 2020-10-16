@@ -1,18 +1,5 @@
 const socket = io();
 
-function loadChatApp() {
-  const username = document.getElementById('username');
-  username.onsubmit = chooseUsername;
-
-  const message = document.getElementById('message-form');
-  message.onsubmit = sendMessage;
-
-  socket.on('send_message', addMessage);
-  socket.on('set_username', addUserName);
-  socket.on('send_usernames', getUserNames);
-  socket.on('send_chat_history', restoreMessagesHistory);
-}
-
 function getUserNames(names) {
   let allNames = JSON.parse(names);
   for (let i = 0; i < allNames.length; i++) {
@@ -67,4 +54,28 @@ function addMessage(message) {
   const newMessage = document.createElement('li');
   newMessage.innerHTML = message;
   messages.appendChild(newMessage);
+}
+
+function setupSocketHandlers() {
+  socket.on('send_message', addMessage);
+  socket.on('set_username', addUserName);
+  socket.on('send_usernames', getUserNames);
+  socket.on('send_chat_history', restoreMessagesHistory);
+  socket.on('ping', (data) => {
+    console.log('client ping');
+    socket.emit('pong', data);
+    console.log('client ponged');
+  });
+}
+
+function loadChatApp() {
+  const username = document.getElementById('username');
+  username.onsubmit = chooseUsername;
+
+  const message = document.getElementById('message-form');
+  message.onsubmit = sendMessage;
+
+  setupSocketHandlers();
+  socket.emit('get_chat_history');
+  socket.emit('get_usernames');
 }
