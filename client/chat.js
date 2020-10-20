@@ -1,5 +1,3 @@
-const socket = io();
-
 function getUserNames(names) {
   let allNames = JSON.parse(names);
   for (let i = 0; i < allNames.length; i++) {

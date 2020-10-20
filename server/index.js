@@ -37,10 +37,16 @@ let userNames = new Set();
 userNames.add('angela');
 userNames.add('sam');
 let socketIdToUsername = { abcdef: 'angela', efghju: 'sam' };
-// For testing. TODO. remember to delete.
+
 let chats = [
   { user: 'sam', message: 'hi' },
   { user: 'sam', message: 'test' },
+];
+
+let bids = [
+  // For testing. TODO: delete.
+  { user: 'sam', bid: 8 },
+  { user: 'angela', bid: 7 },
 ];
 
 function sendHeartbeat() {
@@ -67,6 +73,7 @@ io.on('connection', (socket) => {
 
   // Sending a new message.
   socket.on('send_message', (msg) => {
+    console.log(`in message ${socket.id}`);
     const chatEntry = { user: socketIdToUsername[socket.id], message: msg };
     chats.push(chatEntry);
     io.emit('send_message', `${socketIdToUsername[socket.id]}: ${msg}`);
@@ -85,6 +92,17 @@ io.on('connection', (socket) => {
   // Emits chat history only to new client when requested.
   socket.on('get_chat_history', () => {
     io.to(socket.id).emit('send_chat_history', JSON.stringify(chats));
+  });
+
+  // Submitting a bid.
+  socket.on('send_bid', (bid) => {
+    console.log(`in bid ${socket.id}`);
+    const bidEntry = { user: socketIdToUsername[socket.id], bid: bid };
+    bids.push(bidEntry);
+    io.to(socket.id).emit(
+      'send_bid',
+      `${socketIdToUsername[socket.id]}: ${bid} steps`
+    );
   });
 });
 

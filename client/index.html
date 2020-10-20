@@ -5,11 +5,14 @@
     <link rel="stylesheet" href="main.css" />
     <link rel="stylesheet" href="message.css" />
     <link rel="stylesheet" href="username.css" />
+    <link rel="stylesheet" href="auction.css" />
     <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="chat.js"></script>
+    <script type="text/javascript" src="auction.js"></script>
   </head>
   <!--load function when page is loaded with empty DOM-->
-  <body onload="loadChatApp()">
+  <body onload="loadChatApp(); loadAuctionApp()">
     <div class="messages_block">
       <h3>Chat Messages</h3>
       <ul id="messages"></ul>
@@ -23,7 +26,13 @@
       <form id="username" action="">
         <input id="name" autocomplete="off" /><button>Send</button>
       </form>
-    </form>
-  </div>
+    </div>
+    <div class="auction_block">
+      <h3>Auction</h3>
+      <ul id="auctions"></ul>
+      <form id="bid-form" action="">
+        <input id="bid" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
   </body>
 </html>
