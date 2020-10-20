@@ -73,7 +73,6 @@ io.on('connection', (socket) => {
 
   // Sending a new message.
   socket.on('send_message', (msg) => {
-    console.log(`in message ${socket.id}`);
     const chatEntry = { user: socketIdToUsername[socket.id], message: msg };
     chats.push(chatEntry);
     io.emit('send_message', `${socketIdToUsername[socket.id]}: ${msg}`);
@@ -96,7 +95,6 @@ io.on('connection', (socket) => {
 
   // Submitting a bid.
   socket.on('send_bid', (bid) => {
-    console.log(`in bid ${socket.id}`);
     const bidEntry = { user: socketIdToUsername[socket.id], bid: bid };
     bids.push(bidEntry);
     io.to(socket.id).emit(

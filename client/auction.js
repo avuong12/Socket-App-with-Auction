@@ -1,6 +1,7 @@
 function makeBid(event) {
   event.preventDefault();
   let inputBid = document.getElementById('bid');
+  console.log(socket);
   socket.emit('send_bid', inputBid.value);
   inputBid.value = '';
   return false;
