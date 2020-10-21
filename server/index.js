@@ -45,9 +45,10 @@ let chats = [
 
 let bids = [
   // For testing. TODO: delete.
-  { user: 'sam', bid: 8 },
-  { user: 'angela', bid: 7 },
 ];
+
+let hasValidBid = false;
+let lowestBidSoFar = undefined;
 
 function sendHeartbeat() {
   setTimeout(sendHeartbeat, 8000);
@@ -95,9 +96,20 @@ io.on('connection', (socket) => {
 
   // Submitting a bid.
   socket.on('send_bid', (bid) => {
-    const bidEntry = { user: socketIdToUsername[socket.id], bid: bid };
-    bids.push(bidEntry);
     io.emit('send_bid', `${socketIdToUsername[socket.id]}: ${bid} steps`);
+    const bidEntry = { user: socketIdToUsername[socket.id], bid: bid };
+    if (bids.length === 0 && hasValidBid === false) {
+      bids.push(bidEntry);
+      lowestBidSoFar = Number(bid);
+      io.emit('start_timer', true);
+      io.emit('lowest_bid_user', bidEntry.user, bidEntry.bid);
+      hasValidBid = true;
+    } else if (hasValidBid === true && Number(bid) < lowestBidSoFar) {
+      bids.pop();
+      bids.push(bidEntry);
+      io.emit('lowest_bid_user', bidEntry.user, bidEntry.bid);
+      lowestBidSoFar = Number(bid);
+    }
   });
 });
 
