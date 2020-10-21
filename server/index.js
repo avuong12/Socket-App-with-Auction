@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
       socketIdToUsername[socket.id] = name;
       io.emit('set_username', name);
     } else {
-      io.emit('set_username', false);
+      io.to(socket.id).emit('set_username', false);
     }
   });
 
@@ -97,10 +97,7 @@ io.on('connection', (socket) => {
   socket.on('send_bid', (bid) => {
     const bidEntry = { user: socketIdToUsername[socket.id], bid: bid };
     bids.push(bidEntry);
-    io.to(socket.id).emit(
-      'send_bid',
-      `${socketIdToUsername[socket.id]}: ${bid} steps`
-    );
+    io.emit('send_bid', `${socketIdToUsername[socket.id]}: ${bid} steps`);
   });
 });
 
