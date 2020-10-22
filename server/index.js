@@ -112,5 +112,5 @@ io.on('connection', (socket) => {
     }
   });
 });
-
+// Keeps the socket active in order to use socket.id.
 setTimeout(sendHeartbeat, 8000);

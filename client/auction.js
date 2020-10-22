@@ -2,6 +2,7 @@ class Auction {
   constructor(socket) {
     this.socket = socket;
     this.currentTimer = undefined;
+    this.lowestBidder = undefined;
   }
 
   makeBid(event) {
@@ -48,8 +49,7 @@ class Auction {
         timerDiv.innerHTML = `0:0${secondsRemaining} sec`;
         window.requestAnimationFrame(updateTimer);
       } else {
-        timerDiv.innerHTML = '';
-        alert('Time is Up! Stop bidding. Bidder, Reveal the Path.');
+        timerDiv.innerHTML = `Time is Up! Stop bidding. Reveal the Path ${this.lowestBidder.toUpperCase()}.`;
         this.currentTimer = undefined;
       }
     };
@@ -58,7 +58,8 @@ class Auction {
 
   getLowestBidUser(user, bid) {
     const userBid = document.getElementById('bidder');
-    userBid.innerHTML = `Number of steps to beat: ${bid}. Made by ${user}.`;
+    userBid.innerHTML = `Number of steps to beat: ${bid}. Made by ${user.toUpperCase()}.`;
+    this.lowestBidder = user;
   }
 
   setupAuctionSocketHandlers() {
